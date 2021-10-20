@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose
 
-const FrenulectomySchema = new Schema(
+const EstheticProblemSchema = new Schema(
     {
         title: { type: String, required: true },
         description: { type: String, required: true },
@@ -16,4 +16,4 @@ const FrenulectomySchema = new Schema(
 
 
 
-export default model("frenulectomy", FrenulectomySchema)
+export default model("estheticProblem", EstheticProblemSchema)

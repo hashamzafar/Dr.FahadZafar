@@ -6,7 +6,8 @@ const { Schema, model } = mongoose
 const PocketEliminationSchema = new Schema(
     {
         title: { type: String, required: true },
-        article: { type: String, required: true }
+        description: { type: String, required: true },
+        image: { type: String, required: true }
 
 
     },

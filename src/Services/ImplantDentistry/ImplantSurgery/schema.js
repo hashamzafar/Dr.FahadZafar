@@ -3,12 +3,11 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose
 
-const FrenulectomySchema = new Schema(
+const ImplantSurgerySchema = new Schema(
     {
         title: { type: String, required: true },
         description: { type: String, required: true },
         image: { type: String, required: true }
-
 
     },
     { timestamp: true }
@@ -16,4 +15,4 @@ const FrenulectomySchema = new Schema(
 
 
 
-export default model("frenulectomy", FrenulectomySchema)
+export default model("implantSurgery", ImplantSurgerySchema)

@@ -9,6 +9,11 @@ import ImpactedCanineExposureRouter from './Services/PerioCases/ImpactedCanineEx
 import NonSurgicalRouter from './Services/PerioCases/NonSurgicalTherapy/index.js'
 import PeriodontalRegenerRouter from './Services/PerioCases/PeriodontalRegenerSurgery/index.js'
 import PocketEliminationRouter from "./Services/PerioCases/PocketEliminationSurgery/index.js"
+import EstheticProblemRouter from "./Services/ImplantDentistry/EstheticProblemsImplants/index.js"
+import ImplantSurgeryRouter from './Services/ImplantDentistry/ImplantSurgery/index.js';
+import GuidedBoneRouter from './Services/ImplantDentistry/guidedBoneRegeneration/index.js';
+import PeriImplantitisRouter from './Services/ImplantDentistry/PeriImplantitisTreatment/index.js'
+import SinusLiftRouter from './Services/ImplantDentistry/SinusLiftProcedure/index.js';
 const server = express()
 
 const port = process.env.PORT || 3001
@@ -23,6 +28,13 @@ server.use("/perio/nonsurgical", NonSurgicalRouter)
 server.use("/perio/periodontal", PeriodontalRegenerRouter)
 server.use("/perio/pocketelimination", PocketEliminationRouter)
 
+
+// Router implant
+server.use("/implant/Esthetic", EstheticProblemRouter)
+server.use("/implant/guidedBone", GuidedBoneRouter)
+server.use("/implant/implantSurgery", ImplantSurgeryRouter)
+server.use("/implant/peri", PeriImplantitisRouter)
+server.use("/implant/sinus", SinusLiftRouter)
 // error handler
 server.use(unathorizedHandler)
 server.use(forbiddenHandler)
