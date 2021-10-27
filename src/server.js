@@ -14,9 +14,22 @@ import ImplantSurgeryRouter from './Services/ImplantDentistry/ImplantSurgery/ind
 import GuidedBoneRouter from './Services/ImplantDentistry/guidedBoneRegeneration/index.js';
 import PeriImplantitisRouter from './Services/ImplantDentistry/PeriImplantitisTreatment/index.js'
 import SinusLiftRouter from './Services/ImplantDentistry/SinusLiftProcedure/index.js';
+import cors from "cors"
 const server = express()
+const whiteList = [process.env.DEV]// COMING FROM ENV FILE
 
-const port = process.env.PORT || 3001
+const corsOpts = {
+    origin: function (origin, next) {
+        console.log('ORIGIN --> ', origin)
+        if (!origin || whiteList.indexOf(origin) !== -1) { // if received origin is in the whitelist I'm going to allow that request
+            next(null, true)
+        } else { // if it is not, I'm going to reject that request
+            next(new Error(`Origin ${origin} not allowed!`))
+        }
+    }
+}
+
+server.use(cors(corsOpts))
 server.use(express.json())
 
 // Router perio
@@ -42,6 +55,7 @@ server.use(badRequestErrorHandler)
 server.use(notFoundErrorHandler)
 server.use(catchAllErrorHandler)
 
+const port = process.env.PORT || 3001
 mongoose.connect(process.env.MONGO_URL_PERIO)
 mongoose.connection.on("connected", () => {
     console.log('Successfully connected to mongo!')
