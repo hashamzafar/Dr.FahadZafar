@@ -30,7 +30,7 @@ const corsOpts = {
 }
 
 server.use(cors(corsOpts))
-server.use(express.json())
+server.use(express.json({ limit: '500mb', extended: true }))
 
 // Router perio
 server.use("/perio/crown", CrownLengthRouter)
@@ -43,9 +43,9 @@ server.use("/perio/pocketelimination", PocketEliminationRouter)
 
 
 // Router implant
-server.use("/implant/Esthetic", EstheticProblemRouter)
-server.use("/implant/guidedBone", GuidedBoneRouter)
-server.use("/implant/implantSurgery", ImplantSurgeryRouter)
+server.use("/implant/esthetic", EstheticProblemRouter)
+server.use("/implant/guidedbone", GuidedBoneRouter)
+server.use("/implant/implantsurgery", ImplantSurgeryRouter)
 server.use("/implant/peri", PeriImplantitisRouter)
 server.use("/implant/sinus", SinusLiftRouter)
 // error handler

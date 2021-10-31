@@ -20,6 +20,7 @@
 	},
 	"homepage": "https://github.com/hashamzafar/Dr.FahadZafar#readme",
 	"dependencies": {
+		"cloudinary": "^1.27.1",
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
 		"express-list-endpoints": "^6.0.0",
@@ -27,6 +28,8 @@
 		"fs-extra": "^10.0.0",
 		"http-errors": "^1.8.0",
 		"mongoose": "^6.0.11",
+		"multer": "^1.4.3",
+		"path": "^0.12.7",
 		"query-to-mongo": "^0.10.1",
 		"validator": "^13.6.0"
 	},

@@ -1,20 +1,35 @@
 import express from "express";
 import CrownModel from "./Schema.js"
 import createError from "http-errors"
+import cloudinary from "../../utils/cloudinary.js"
+// import { multer } from "../../utils/multer.js"
+// const upload = ("../../../utils/multer.js")
 
 const CrownLengthRouter = express.Router();
 
-
+CrownLengthRouter.post('/', async (req, res) => {
+    try {
+        const fileStr = req.body.data
+        const uploadedResponse = await cloudinary.uploader.upload(fileStr, { upload_present: 'ml_default' })
+        console.log(uploadResponse)
+        res.json({ msg: "image uploaded" })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ err: "something went wrong" })
+    }
+})
 
 
 CrownLengthRouter.post('/', async (req, res, next) => {
     try {
         const newCrownLength = new CrownModel(req.body)
+
         const { _id } = await newCrownLength.save()
         res.status(201).send({ _id })
 
     } catch (error) {
         next(error)
+        console.log(error)
     }
 })
 CrownLengthRouter.get('/', async (req, res, next) => {
