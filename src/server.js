@@ -15,6 +15,8 @@ import GuidedBoneRouter from './Services/ImplantDentistry/guidedBoneRegeneration
 import PeriImplantitisRouter from './Services/ImplantDentistry/PeriImplantitisTreatment/index.js'
 import SinusLiftRouter from './Services/ImplantDentistry/SinusLiftProcedure/index.js';
 import cors from "cors"
+import testRouter from './Services/test.js';
+
 const server = express()
 const whiteList = [process.env.DEV]// COMING FROM ENV FILE
 
@@ -29,6 +31,7 @@ const corsOpts = {
     }
 }
 
+
 server.use(cors(corsOpts))
 server.use(express.json({ limit: '500mb', extended: true }))
 
@@ -41,7 +44,7 @@ server.use("/perio/nonsurgical", NonSurgicalRouter)
 server.use("/perio/periodontal", PeriodontalRegenerRouter)
 server.use("/perio/pocketelimination", PocketEliminationRouter)
 
-
+server.use("/test", testRouter)
 // Router implant
 server.use("/implant/esthetic", EstheticProblemRouter)
 server.use("/implant/guidedbone", GuidedBoneRouter)
