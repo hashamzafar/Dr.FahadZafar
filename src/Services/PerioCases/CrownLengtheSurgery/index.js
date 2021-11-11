@@ -13,7 +13,7 @@ const CrownLengthRouter = express.Router();
 
 export const storage = new CloudinaryStorage({
     cloudinary,
-    params: { folder: "testing" },
+    params: { folder: "dr.fahadzafar" },
 });
 
 
@@ -51,7 +51,7 @@ CrownLengthRouter.post('/', multer({ storage }).single("image"), async (req, res
         res.status(201).send({ _id })
         console.log(req.file.path)
     } catch (error) {
-        c
+
         next(error)
         console.log(error)
     }
