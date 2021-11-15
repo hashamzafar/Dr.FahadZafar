@@ -11,9 +11,9 @@ import { CloudinaryStorage } from "multer-storage-cloudinary"
 import multer from "multer";
 const CrownLengthRouter = express.Router();
 
-export const storage = new CloudinaryStorage({
+const cloudinaryStorage = new CloudinaryStorage({
     cloudinary,
-    params: { folder: "dr.fahadzafar" },
+    params: { folder: "testing" },
 });
 
 
@@ -39,17 +39,18 @@ export const storage = new CloudinaryStorage({
 // })
 
 
-CrownLengthRouter.post('/', multer({ storage }).single("image"), async (req, res, next) => {
+CrownLengthRouter.post('/', multer({ storage: cloudinaryStorage }).single("image"), async (req, res, next) => {
     try {
 
         const newCrownLength = await new CrownModel(req.body)
         const { _id } = await newCrownLength.save()
         if (req.file) {
             const update = { image: req.file.path }
-            await CrownModel.findByIdAndUpdate(_id, update, { returnOriginal: false })
+            await CrownModel.findByIdAndUpdate(_id, update, { returnOriginal: true })
         }
-        res.status(201).send({ _id })
-        console.log(req.file.path)
+        console.log(req.file)
+        return res.status(201).send({ _id })
+
     } catch (error) {
 
         next(error)
