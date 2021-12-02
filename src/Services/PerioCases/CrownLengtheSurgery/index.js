@@ -1,55 +1,47 @@
 import express from "express";
 import CrownModel from "./Schema.js"
 import createError from "http-errors"
-// import cloudinary from "../../utils/cloudinary.js"
-// import multer from "multer"
-// import { multer } from "../../utils/multer.js"
-// const upload = ("../../../utils/multer.js")
-// const upload = multer({})
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../../utils/cloudinary.js"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
 import multer from "multer";
+
 const CrownLengthRouter = express.Router();
 
 const cloudinaryStorage = new CloudinaryStorage({
     cloudinary,
-    params: { folder: "testing" },
+    params: { folder: "crowns" },
 });
 
-
-// CrownLengthRouter.post('/', multer({ storage }).single("image"), async (req, res) => {
-//     try {
-//         // const fileStr = new CrownModel(req.body.image)
-//         // const uploadedResponse = await cloudinary.uploader.upload(fileStr, { upload_present: 'ml_default' })
-//         console.log(uploadedResponse)
-
-//         res.json({ msg: "image uploaded" })
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ err: "something went wrong" })
-//     }
-// })
-// CrownLengthRouter.get('/image', async function (req, res) {
-//     const { resources } = await cloudinary.search.expressions('folder: ml_default')
-//         .sort_by('public_id', "desc")
-//         .max_results(30)
-//         .execute()
-//     const publicIds = resources.map(file => file.public_id)
-//     res.send(publicIds)
-// })
+const parser = multer({ storage: cloudinaryStorage })
 
 
-CrownLengthRouter.post('/', multer({ storage: cloudinaryStorage }).single("image"), async (req, res, next) => {
+
+CrownLengthRouter.post('/', async (req, res, next) => {
     try {
-
         const newCrownLength = await new CrownModel(req.body)
         const { _id } = await newCrownLength.save()
+
+        return res.status(201).send({ _id })
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
+
+CrownLengthRouter.post('/:id/img', parser.single("image"), async (req, res, next) => {
+    try {
+        console.log("this is file", req);
+        /* const newCrownLength = await new CrownModel(req.body)
+        const { _id } = await newCrownLength.save() */
         if (req.file) {
             const update = { image: req.file.path }
-            await CrownModel.findByIdAndUpdate(_id, update, { returnOriginal: true })
-        }
-        console.log(req.file)
-        return res.status(201).send({ _id })
+            await CrownModel.findByIdAndUpdate(req.params.id, update, { returnOriginal: true })
+            res.status(201).send("done")
+        } else res.status(500).send("no image")
+
 
     } catch (error) {
 
@@ -77,9 +69,9 @@ CrownLengthRouter.get('/:_id', async (req, res, next) => {
 CrownLengthRouter.put('/:_id', async (req, res, next) => {
     try {
         const crownLengthId = req.params._id
-        const modifiedCrownLength = await CrownModel.findByIdAndUpdate(crownLengthId, req.body, {
-            new: true
-        })
+        const modifiedCrownLength = await CrownModel.findByIdAndUpdate(crownLengthId,
+            { $set: req.body },
+            { new: true })
         if (modifiedCrownLength) {
             res.send(modifiedCrownLength)
         } else {

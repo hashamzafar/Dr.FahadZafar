@@ -16,7 +16,7 @@ import PeriImplantitisRouter from './Services/ImplantDentistry/PeriImplantitisTr
 import SinusLiftRouter from './Services/ImplantDentistry/SinusLiftProcedure/index.js';
 import cors from "cors"
 import testRouter from './Services/test.js';
-
+import UserRouter from "./Services/user/index.js"
 const server = express()
 const whiteList = [process.env.DEV]// COMING FROM ENV FILE
 
@@ -51,6 +51,9 @@ server.use("/implant/guidedbone", GuidedBoneRouter)
 server.use("/implant/implantsurgery", ImplantSurgeryRouter)
 server.use("/implant/peri", PeriImplantitisRouter)
 server.use("/implant/sinus", SinusLiftRouter)
+
+// Router user
+server.use("/users", UserRouter);
 // error handler
 server.use(unathorizedHandler)
 server.use(forbiddenHandler)
