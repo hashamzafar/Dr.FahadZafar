@@ -1,8 +1,54 @@
-import express from "express";
+import express from "express"
 import GumModel from "./schema.js"
 import createError from "http-errors"
+import cloudinary from "../../utils/cloudinary.js"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
+import multer from "multer";
+import msc from 'multer-storage-cloudinary'
+const GumPlasticRouter = express.Router()
 
-const GumPlasticRouter = express.Router();
+const cloudinaryStorage = new msc.CloudinaryStorage({
+    cloudinary,
+    params: { folder: "gum" },
+});
+
+const parser = multer({ storage: cloudinaryStorage })
+
+
+
+GumPlasticRouter.post('/', async (req, res, next) => {
+    try {
+        const newGumPlastic = await new GumModel(req.body)
+        const { _id } = await newGumPlastic.save()
+
+        return res.status(201).send({ _id })
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
+
+GumPlasticRouter.post('/:id/img', parser.single("image"), async (req, res, next) => {
+    try {
+        console.log("this is file", req);
+
+        if (req.file) {
+            const update = { image: req.file.path }
+            await GumModel.findByIdAndUpdate(req.params.id, update, { returnOriginal: true })
+            res.status(201).send("done")
+        } else res.status(500).send("no image")
+
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
 
 
 
@@ -14,16 +60,7 @@ GumPlasticRouter.get('/', async (req, res, next) => {
         next(error)
     }
 })
-GumPlasticRouter.post('/', async (req, res, next) => {
-    try {
-        const newGumPlastic = new GumModel(req.body)
-        const { _id } = await newGumPlastic.save()
-        res.status(201).send({ _id })
 
-    } catch (error) {
-        next(error)
-    }
-})
 
 GumPlasticRouter.get('/:_id', async (req, res, next) => {
     try {

@@ -1,22 +1,53 @@
-import express from "express";
+import express from "express"
 import FrenulectomyModel from "./schema.js"
 import createError from "http-errors"
+import cloudinary from "../../utils/cloudinary.js"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
+import multer from "multer";
+const FrenulectomyRouter = express.Router()
+import msc from 'multer-storage-cloudinary'
+const cloudinaryStorage = new msc.CloudinaryStorage({
+    cloudinary,
+    params: { folder: "frenulectomy" },
+});
 
-const FrenulectomyRouter = express.Router();
-
+const parser = multer({ storage: cloudinaryStorage })
 
 
 
 FrenulectomyRouter.post('/', async (req, res, next) => {
     try {
-        const newFrenulectomy = new FrenulectomyModel(req.body)
+        const newFrenulectomy = await new FrenulectomyModel(req.body)
         const { _id } = await newFrenulectomy.save()
-        res.status(201).send({ _id })
+
+        return res.status(201).send({ _id })
 
     } catch (error) {
+
         next(error)
+        console.log(error)
     }
 })
+
+
+FrenulectomyRouter.post('/:id/img', parser.single("image"), async (req, res, next) => {
+    try {
+        console.log("this is file", req);
+
+        if (req.file) {
+            const update = { image: req.file.path }
+            await FrenulectomyModel.findByIdAndUpdate(req.params.id, update, { returnOriginal: true })
+            res.status(201).send("done")
+        } else res.status(500).send("no image")
+
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
 FrenulectomyRouter.get('/', async (req, res, next) => {
     try {
         const frenulectomy = await FrenulectomyModel.find()

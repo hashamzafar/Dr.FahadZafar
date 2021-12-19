@@ -1,33 +1,50 @@
-import express from "express";
+import express from "express"
 import CrownModel from "./Schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-// import { multer } from "../../utils/multer.js"
-// const upload = ("../../../utils/multer.js")
-
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
+import multer from "multer";
+import msc from 'multer-storage-cloudinary'
 const CrownLengthRouter = express.Router();
 
-CrownLengthRouter.post('/', async (req, res) => {
-    try {
-        const fileStr = req.body.data
-        const uploadedResponse = await cloudinary.uploader.upload(fileStr, { upload_present: 'ml_default' })
-        console.log(uploadResponse)
-        res.json({ msg: "image uploaded" })
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ err: "something went wrong" })
-    }
-})
+const cloudinaryStorage = new msc.CloudinaryStorage({
+    cloudinary,
+    params: { folder: "crowns" },
+});
+
+const parser = multer({ storage: cloudinaryStorage })
+
 
 
 CrownLengthRouter.post('/', async (req, res, next) => {
     try {
-        const newCrownLength = new CrownModel(req.body)
-
+        const newCrownLength = await new CrownModel(req.body)
         const { _id } = await newCrownLength.save()
-        res.status(201).send({ _id })
+
+        return res.status(201).send({ _id })
 
     } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
+
+CrownLengthRouter.post('/:id/img', parser.single("image"), async (req, res, next) => {
+    try {
+        console.log("this is file", req);
+        /* const newCrownLength = await new CrownModel(req.body)
+        const { _id } = await newCrownLength.save() */
+        if (req.file) {
+            const update = { image: req.file.path }
+            await CrownModel.findByIdAndUpdate(req.params.id, update, { returnOriginal: true })
+            res.status(201).send("done")
+        } else res.status(500).send("no image")
+
+
+    } catch (error) {
+
         next(error)
         console.log(error)
     }
@@ -52,9 +69,9 @@ CrownLengthRouter.get('/:_id', async (req, res, next) => {
 CrownLengthRouter.put('/:_id', async (req, res, next) => {
     try {
         const crownLengthId = req.params._id
-        const modifiedCrownLength = await CrownModel.findByIdAndUpdate(crownLengthId, req.body, {
-            new: true
-        })
+        const modifiedCrownLength = await CrownModel.findByIdAndUpdate(crownLengthId,
+            { $set: req.body },
+            { new: true })
         if (modifiedCrownLength) {
             res.send(modifiedCrownLength)
         } else {

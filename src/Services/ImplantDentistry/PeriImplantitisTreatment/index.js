@@ -1,9 +1,52 @@
 import express from "express";
 import PeriImplantitisModel from "./schema.js"
 import createError from "http-errors"
+import cloudinary from "../../utils/cloudinary.js"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
+import multer from "multer";
+import msc from 'multer-storage-cloudinary'
+const PeriImplantitisRouter = express.Router()
 
-const PeriImplantitisRouter = express.Router();
+const cloudinaryStorage = new msc.CloudinaryStorage({
+    cloudinary,
+    params: { folder: "PeriImplantitis" },
+});
 
+const parser = multer({ storage: cloudinaryStorage })
+
+
+PeriImplantitisRouter.post('/', async (req, res, next) => {
+    try {
+        const newPeriImplantitis = await new PeriImplantitisModel(req.body)
+        const { _id } = await newPeriImplantitis.save()
+
+        return res.status(201).send({ _id })
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
+
+PeriImplantitisRouter.post('/:id/img', parser.single("image"), async (req, res, next) => {
+    try {
+        console.log("this is file", req);
+
+        if (req.file) {
+            const update = { image: req.file.path }
+            await PeriImplantitisModel.findByIdAndUpdate(req.params.id, update, { returnOriginal: true })
+            res.status(201).send("done")
+        } else res.status(500).send("no image")
+
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
 
 
 PeriImplantitisRouter.get('/', async (req, res, next) => {

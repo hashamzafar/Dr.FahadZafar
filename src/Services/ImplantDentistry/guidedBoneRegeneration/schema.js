@@ -5,12 +5,12 @@ const { Schema, model } = mongoose
 
 const GuidedBoneSchema = new Schema(
     {
-        title: { type: String, required: true },
-        description: { type: String, required: true },
-        image: { type: String, required: true }
+        title: { type: String, required: false },
+        description: { type: String, required: false },
+        image: { type: String, required: false }
 
     },
-    { timestamp: true }
+    { timestamps: true }
 )
 
 

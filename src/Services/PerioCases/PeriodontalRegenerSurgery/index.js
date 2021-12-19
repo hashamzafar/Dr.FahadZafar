@@ -1,8 +1,54 @@
-import express from "express";
+import express from "express"
 import PeriodontalRegenerModel from "./schema.js"
 import createError from "http-errors"
+import cloudinary from "../../utils/cloudinary.js"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
+import multer from "multer";
+import msc from 'multer-storage-cloudinary'
+const PeriodontalRegenerRouter = express.Router()
 
-const PeriodontalRegenerRouter = express.Router();
+const cloudinaryStorage = new msc.CloudinaryStorage({
+    cloudinary,
+    params: { folder: "PeriodontalRegener" },
+});
+
+const parser = multer({ storage: cloudinaryStorage })
+
+
+
+PeriodontalRegenerRouter.post('/', async (req, res, next) => {
+    try {
+        const newPeriodontalRegener = await new PeriodontalRegenerModel(req.body)
+        const { _id } = await newPeriodontalRegener.save()
+
+        return res.status(201).send({ _id })
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
+
+PeriodontalRegenerRouter.post('/:id/img', parser.single("image"), async (req, res, next) => {
+    try {
+        console.log("this is file", req);
+
+        if (req.file) {
+            const update = { image: req.file.path }
+            await PeriodontalRegenerModel.findByIdAndUpdate(req.params.id, update, { returnOriginal: true })
+            res.status(201).send("done")
+        } else res.status(500).send("no image")
+
+
+    } catch (error) {
+
+        next(error)
+        console.log(error)
+    }
+})
+
 
 
 
@@ -14,16 +60,7 @@ PeriodontalRegenerRouter.get('/', async (req, res, next) => {
         next(error)
     }
 })
-PeriodontalRegenerRouter.post('/', async (req, res, next) => {
-    try {
-        const newPeriodontalRegener = new PeriodontalRegenerModel(req.body)
-        const { _id } = await newPeriodontalRegener.save()
-        res.status(201).send({ _id })
 
-    } catch (error) {
-        next(error)
-    }
-})
 
 PeriodontalRegenerRouter.get('/:_id', async (req, res, next) => {
     try {
