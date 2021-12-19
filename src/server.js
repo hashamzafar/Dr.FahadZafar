@@ -1,7 +1,7 @@
-import express from 'express';
+import express from 'express'
 import listEndpoints from "express-list-endpoints"
 import mongoose from 'mongoose'
-import CrownLengthRouter from './Services/PerioCases/CrownLengtheSurgery/index.js';
+import CrownLengthRouter from './Services/PerioCases/CrownLengtheSurgery/index.js'
 import { badRequestErrorHandler, catchAllErrorHandler, notFoundErrorHandler, unathorizedHandler, forbiddenHandler } from './errorHandlers.js'
 import FrenulectomyRouter from './Services/PerioCases/Frenulectomy/index.js'
 import GumPlasticRouter from "./Services/PerioCases/GumPlasticSurgery/index.js"
@@ -10,12 +10,12 @@ import NonSurgicalRouter from './Services/PerioCases/NonSurgicalTherapy/index.js
 import PeriodontalRegenerRouter from './Services/PerioCases/PeriodontalRegenerSurgery/index.js'
 import PocketEliminationRouter from "./Services/PerioCases/PocketEliminationSurgery/index.js"
 import EstheticProblemRouter from "./Services/ImplantDentistry/EstheticProblemsImplants/index.js"
-import ImplantSurgeryRouter from './Services/ImplantDentistry/ImplantSurgery/index.js';
-import GuidedBoneRouter from './Services/ImplantDentistry/guidedBoneRegeneration/index.js';
+import ImplantSurgeryRouter from './Services/ImplantDentistry/ImplantSurgery/index.js'
+import GuidedBoneRouter from './Services/ImplantDentistry/guidedBoneRegeneration/index.js'
 import PeriImplantitisRouter from './Services/ImplantDentistry/PeriImplantitisTreatment/index.js'
-import SinusLiftRouter from './Services/ImplantDentistry/SinusLiftProcedure/index.js';
+import SinusLiftRouter from './Services/ImplantDentistry/SinusLiftProcedure/index.js'
 import cors from "cors"
-import testRouter from './Services/test.js';
+// import testRouter from './Services/test.js'
 import UserRouter from "./Services/user/index.js"
 const server = express()
 const whiteList = [process.env.DEV]// COMING FROM ENV FILE
@@ -33,6 +33,7 @@ const corsOpts = {
 
 
 server.use(cors(corsOpts))
+// server.use(cors())
 server.use(express.json({ limit: '500mb', extended: true }))
 
 // Router perio
@@ -44,7 +45,7 @@ server.use("/perio/nonsurgical", NonSurgicalRouter)
 server.use("/perio/periodontal", PeriodontalRegenerRouter)
 server.use("/perio/pocketelimination", PocketEliminationRouter)
 
-server.use("/test", testRouter)
+// server.use("/test", testRouter)
 // Router implant
 server.use("/implant/esthetic", EstheticProblemRouter)
 server.use("/implant/guidedbone", GuidedBoneRouter)
@@ -53,7 +54,7 @@ server.use("/implant/peri", PeriImplantitisRouter)
 server.use("/implant/sinus", SinusLiftRouter)
 
 // Router user
-server.use("/users", UserRouter);
+server.use("/user", UserRouter);
 // error handler
 server.use(unathorizedHandler)
 server.use(forbiddenHandler)

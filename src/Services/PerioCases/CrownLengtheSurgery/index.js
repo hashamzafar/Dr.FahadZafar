@@ -1,13 +1,13 @@
-import express from "express";
+import express from "express"
 import CrownModel from "./Schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-import { CloudinaryStorage } from "multer-storage-cloudinary"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
 import multer from "multer";
-
+import msc from 'multer-storage-cloudinary'
 const CrownLengthRouter = express.Router();
 
-const cloudinaryStorage = new CloudinaryStorage({
+const cloudinaryStorage = new msc.CloudinaryStorage({
     cloudinary,
     params: { folder: "crowns" },
 });

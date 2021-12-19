@@ -1,14 +1,14 @@
-import express from "express";
+import express from "express"
 import PocketEliminationModel from "./schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-import { CloudinaryStorage } from "multer-storage-cloudinary"
-import multer from "multer";
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
+import multer from "multer"
+import msc from 'multer-storage-cloudinary'
+const PocketEliminationRouter = express.Router()
 
-const PocketEliminationRouter = express.Router();
 
-
-const cloudinaryStorage = new CloudinaryStorage({
+const cloudinaryStorage = new msc.CloudinaryStorage({
     cloudinary,
     params: { folder: "nonsurgical" },
 });

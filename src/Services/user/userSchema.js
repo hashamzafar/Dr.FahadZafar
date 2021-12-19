@@ -1,5 +1,7 @@
+
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+
 const { Schema, model } = mongoose;
 
 const UserSchema = new Schema({
@@ -13,21 +15,17 @@ const UserSchema = new Schema({
     unique: [true, "Such email already exists"],
   },
   password: { type: String, required: true },
-  avatar: {
-    type: String,
-    default:
-      "https://www.pngfind.com/pngs/m/676-6764065_default-profile-picture-transparent-hd-png-download.png",
-  },
+
   refreshToken: { type: String },
-  isOnline: { type: Boolean, default: false },
+  accessToken: { type: String }
 });
 
 UserSchema.pre("save", async function (next) {
   const user = this;
-  const plainpassword = user.password;
-  console.log("coming from schema", plainpassword);
+  const plainPassword = user.password;
+  console.log("coming from schema", plainPassword);
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(plainpassword, 10);
+    // user.password = await bcrypt.hash(plainPassword, 10);
     console.log(user.password);
   }
   next();
@@ -45,17 +43,18 @@ UserSchema.methods.toJSON = function () {
   return userObject;
 };
 
-UserSchema.statics.checkCredentials = async function (email, plainpassword) {
+UserSchema.statics.checkCredentials = async function (email, plainPassword) {
   const user = await this.findOne({ email });
 
   if (user) {
     console.log("user find:", user);
 
-    const isMatch = await bcrypt.compare(plainpassword, user.password);
+    const isMatch = await bcrypt.compare(plainPassword, user.password);
 
     if (isMatch) return user;
     else return null;
   } else return null;
 };
+
 
 export default model("user", UserSchema);

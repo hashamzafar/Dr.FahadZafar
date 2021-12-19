@@ -14,5 +14,5 @@ const FrenulectomySchema = new Schema(
 )
 
 
-
+// module.exports.Frenulectomy = ("frenulectomy", FrenulectomySchema)
 export default model("frenulectomy", FrenulectomySchema)

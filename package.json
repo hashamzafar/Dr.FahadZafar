@@ -38,10 +38,12 @@
 		"path": "^0.12.7",
 		"query-to-mongo": "^0.10.1",
 		"tob": "^0.1.2",
-		"validator": "^13.6.0"
+		"validator": "^13.6.0",
+		"yarn": "^1.22.17"
 	},
 	"devDependencies": {
 		"dotenv": "^10.0.0",
 		"nodemon": "^2.0.13"
-	}
+	},
+	"packageManager": "yarn@3.1.0-rc.8"
 }
