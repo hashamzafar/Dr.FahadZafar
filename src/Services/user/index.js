@@ -10,7 +10,7 @@ import { JWTAuthMiddleware } from "../../auth/token.js";
 // import { imageUpload } from "../../Tools/multerTools.js";
 // import { basicAuthMiddleware } from "../../Authorization/basic.js";
 
-const UserRouter = express.Router();
+const userRouter = express.Router();
 
 // REGISTRATION
 userRouter.post("/account", async (req, res, next) => {
@@ -149,4 +149,4 @@ userRouter.get("/", JWTAuthMiddleware, async (req, res, next) => {
     }
 });
 
-export default UserRouter;
+export default userRouter;
