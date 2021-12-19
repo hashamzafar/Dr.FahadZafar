@@ -1,12 +1,13 @@
-import express from "express";
+import express from "express"
 import GumModel from "./schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-import { CloudinaryStorage } from "multer-storage-cloudinary"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
 import multer from "multer";
-const GumPlasticRouter = express.Router();
+import msc from 'multer-storage-cloudinary'
+const GumPlasticRouter = express.Router()
 
-const cloudinaryStorage = new CloudinaryStorage({
+const cloudinaryStorage = new msc.CloudinaryStorage({
     cloudinary,
     params: { folder: "gum" },
 });

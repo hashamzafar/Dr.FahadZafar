@@ -2,15 +2,16 @@ import express from "express";
 import GuidedBoneModel from "./schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-import { CloudinaryStorage } from "multer-storage-cloudinary"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
 import multer from "multer";
-const GuidedBoneRouter = express.Router();
+import msc from 'multer-storage-cloudinary'
+const GuidedBoneRouter = express.Router()
 
 
 
 
 
-const cloudinaryStorage = new CloudinaryStorage({
+const cloudinaryStorage = new msc.CloudinaryStorage({
     cloudinary,
     params: { folder: "guidedbone" },
 });

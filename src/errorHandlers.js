@@ -5,6 +5,7 @@ export const unathorizedHandler = (err, req, res, next) => {
         next(err)
     }
 }
+
 export const forbiddenHandler = (err, req, res, next) => {
     if (err.status === 403) {
         res.status(403).send({ status: "error", message: err.message || " your are not allowed to do that!" })
@@ -23,6 +24,8 @@ export const notFoundErrorHandler = (err, req, res, next) => {
     }
 }
 
+
+
 export const badRequestErrorHandler = (err, req, res, next) => {
     if (err.status === 400 || err.name === "ValidationError") {
         res.status(400).send(err.errors)
@@ -31,7 +34,13 @@ export const badRequestErrorHandler = (err, req, res, next) => {
     }
 }
 
+
 export const catchAllErrorHandler = (err, req, res, next) => {
     console.log(err)
     res.status(500).send("Generic Server Error")
 }
+// exports.unathorizedHandler = unathorizedHandler
+// exports.catchAllErrorHandler = catchAllErrorHandler
+// exports.badRequestErrorHandler = badRequestErrorHandler
+// exports.notFoundErrorHandler = notFoundErrorHandler
+// exports.forbiddenHandler = forbiddenHandler

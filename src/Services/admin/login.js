@@ -25,4 +25,4 @@ LoginRouter.get('/login', async (req, res, next) => {
 })
 
 
-export default LoginRouter
+export default LoginRouter;

@@ -35,5 +35,7 @@ loginSchema.static.checkCredentials = async function (email, password) {
     } else return null
 }
 
+
+
 export default model("login", LoginSchema)
 

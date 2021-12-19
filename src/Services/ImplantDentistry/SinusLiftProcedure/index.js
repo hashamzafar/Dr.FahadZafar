@@ -2,13 +2,13 @@ import express from "express";
 import SinusLiftModel from "./schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-import { CloudinaryStorage } from "multer-storage-cloudinary"
+// const{ CloudinaryStorage } = "multer-storage-cloudinary"
 import multer from "multer";
+import msc from 'multer-storage-cloudinary'
+const SinusLiftRouter = express.Router()
 
-const SinusLiftRouter = express.Router();
 
-
-const cloudinaryStorage = new CloudinaryStorage({
+const cloudinaryStorage = new msc.CloudinaryStorage({
     cloudinary,
     params: { folder: "SinusLift" },
 });

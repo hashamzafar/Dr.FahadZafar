@@ -1,12 +1,12 @@
-import express from "express";
+import express from "express"
 import CanineExposureModel from "./schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-import { CloudinaryStorage } from "multer-storage-cloudinary"
+// const { CloudinaryStorage } = "multer-storage-cloudinary"
 import multer from "multer";
-
-const ImpactedCanineExposureRouter = express.Router();
-const cloudinaryStorage = new CloudinaryStorage({
+import msc from 'multer-storage-cloudinary'
+const ImpactedCanineExposureRouter = express.Router()
+const cloudinaryStorage = new msc.CloudinaryStorage({
     cloudinary,
     params: { folder: "ImpactedCanineExposure" },
 });

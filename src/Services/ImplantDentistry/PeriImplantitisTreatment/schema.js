@@ -1,5 +1,5 @@
 
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 
 const { Schema, model } = mongoose
@@ -13,7 +13,6 @@ const PeriImplantitisSchema = new Schema(
     },
     { timestamp: true }
 )
-
 
 
 export default model("periImplantitis", PeriImplantitisSchema)

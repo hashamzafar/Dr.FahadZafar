@@ -1,19 +1,19 @@
-import express from "express";
-import createHttpError from "http-errors";
-import UserModel from "./userSchema.js";
+import express from "express"
+import createHttpError from "http-errors"
+import UserModel from "./userSchema.js"
 import {
     JWTAuthenticate,
     verifyJWT,
     verifyRefreshAndGenerateTokens,
-} from "../../auth/tools.js";
+} from "../../auth/tools.js"
 import { JWTAuthMiddleware } from "../../auth/token.js";
-// import { imageUpload } from "../../Tools/multerTools.js";
-// import { basicAuthMiddleware } from "../../Authorization/basic.js";
+// const { imageUpload } from "../../Tools/multerTools.js";
+// const { basicAuthMiddleware } from "../../Authorization/basic.js";
 
-const UserRouter = express.Router();
+const UserRouter = express.Router()
 
 // REGISTRATION
-userRouter.post("/account", async (req, res, next) => {
+UserRouter.post("/account", async (req, res, next) => {
     try {
         const newUser = new UserModel(req.body);
         await newUser.save();
@@ -24,7 +24,7 @@ userRouter.post("/account", async (req, res, next) => {
 });
 
 // LOGIN
-userRouter.post("/session", async (req, res, next) => {
+UserRouter.post("/session", async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await UserModel.checkCredentials(email, password);
@@ -40,7 +40,7 @@ userRouter.post("/session", async (req, res, next) => {
     }
 });
 // LOGOUT
-userRouter.delete("/session", JWTAuthMiddleware, async (req, res, next) => {
+UserRouter.delete("/session", JWTAuthMiddleware, async (req, res, next) => {
     try {
         console.log(req.user.refreshToken);
         req.user.refreshToken = undefined;
@@ -52,7 +52,7 @@ userRouter.delete("/session", JWTAuthMiddleware, async (req, res, next) => {
 });
 
 // REFRESH
-userRouter.post(
+UserRouter.post(
     "/session/refresh",
     JWTAuthMiddleware,
     async (req, res, next) => {
@@ -71,7 +71,7 @@ userRouter.post(
 );
 
 // Me
-userRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
+UserRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
     try {
         res.send(req.user);
         console.log("coming from me ", req.user);
@@ -80,43 +80,8 @@ userRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
     }
 });
 
-// EDIT ME
-userRouter.put("/me", JWTAuthMiddleware, async (req, res, next) => {
-    try {
-        // const { email, username } = req.body;
-        const updatedProfile = await UserModel.findByIdAndUpdate(
-            req.user._id,
-            req.body,
-            { new: true }
-        );
-        res.send(updatedProfile);
-    } catch (error) {
-        next(error);
-    }
-});
-
-// CHANGE PICTURE
-// userRouter.post(
-//     "/me/avatar",
-//     JWTAuthMiddleware,
-//     imageUpload.single("avatar"),
-//     async (req, res, next) => {
-//         try {
-//             const imagePath = req.file.path;
-//             const userAvatar = await UserModel.findByIdAndUpdate(
-//                 req.user._id,
-//                 { avatar: imagePath },
-//                 { new: true }
-//             );
-//             res.status(201).send(userAvatar);
-//         } catch (err) {
-//             next(err);
-//         }
-//     }
-// );
-
 // USER
-userRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
+UserRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
     try {
         const user = await UserModel.findById(req.params.id);
         if (user) res.send(user);
@@ -127,7 +92,7 @@ userRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
     }
 });
 
-userRouter.get("/", JWTAuthMiddleware, async (req, res, next) => {
+UserRouter.get("/", JWTAuthMiddleware, async (req, res, next) => {
     try {
         // const filters = req.query;
         const { username, email } = req.query;
