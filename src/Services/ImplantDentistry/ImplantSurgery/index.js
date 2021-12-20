@@ -2,7 +2,6 @@ import express from "express";
 import ImplantSurgeryModel from "./schema.js"
 import createError from "http-errors"
 import cloudinary from "../../utils/cloudinary.js"
-// const { CloudinaryStorage } = "multer-storage-cloudinary"
 import multer from "multer";
 import msc from 'multer-storage-cloudinary'
 const ImplantSurgeryRouter = express.Router()
